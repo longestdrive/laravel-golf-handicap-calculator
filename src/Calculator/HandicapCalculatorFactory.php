@@ -19,9 +19,10 @@ class HandicapCalculatorFactory
 
     public function make(string $key): HandicapCalculatorInterface
     {
-        if (!isset($this->calculators[$key])) {
+        if (! isset($this->calculators[$key])) {
             throw new \InvalidArgumentException("Calculator [$key] not registered.");
         }
+
         return new $this->calculators[$key];
     }
 }

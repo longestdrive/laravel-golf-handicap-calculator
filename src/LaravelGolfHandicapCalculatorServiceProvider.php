@@ -3,11 +3,9 @@
 namespace Longestdrive\LaravelGolfHandicapCalculator;
 
 use Longestdrive\LaravelGolfHandicapCalculator\Calculator\HandicapCalculatorFactory;
+use Longestdrive\LaravelGolfHandicapCalculator\Calculator\WHSHandicapCalculator;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Longestdrive\LaravelGolfHandicapCalculator\Commands\LaravelGolfHandicapCalculatorCommand;
-use Longestdrive\LaravelGolfHandicapCalculator\Calculator\HandicapCalculatorInterface;
-use Longestdrive\LaravelGolfHandicapCalculator\Calculator\WHSHandicapCalculator;
 
 class LaravelGolfHandicapCalculatorServiceProvider extends PackageServiceProvider
 {
@@ -27,9 +25,10 @@ class LaravelGolfHandicapCalculatorServiceProvider extends PackageServiceProvide
     public function packageRegistered(): void
     {
         $this->app->singleton(HandicapCalculatorFactory::class, function ($app) {
-            $factory = new HandicapCalculatorFactory();
+            $factory = new HandicapCalculatorFactory;
             // Optionally register default calculators here
             $factory->register('whs', WHSHandicapCalculator::class);
+
             return $factory;
         });
     }
