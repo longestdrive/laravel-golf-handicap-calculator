@@ -1,29 +1,31 @@
 {
-    "name": ":vendor_slug/:package_slug",
-    "description": ":package_description",
+    "name": "longestdrive/laravel-golf-handicap-calculator",
+    "description": "calculates golf handicaps using various methods including WHS rules",
     "keywords": [
-        ":vendor_name",
+        "Longestdrive",
         "laravel",
-        ":package_slug"
+        "laravel-golf-handicap-calculator"
     ],
-    "homepage": "https://github.com/:vendor_slug/:package_slug",
+    "homepage": "https://github.com/longestdrive/laravel-golf-handicap-calculator",
     "license": "MIT",
     "authors": [
         {
-            "name": ":author_name",
-            "email": "author@domain.com",
+            "name": "Longestdrive",
+            "email": "r.c@email.com",
             "role": "Developer"
         }
     ],
     "require": {
         "php": "^8.3",
+        "illuminate/contracts": "^10.0||^11.0||^12.0",
         "spatie/laravel-package-tools": "^1.16",
-        "illuminate/contracts": "^10.0||^11.0||^12.0"
+        "symfony/options-resolver": "^7.3"
     },
     "require-dev": {
-        "laravel/pint": "^1.14",
-        "nunomaduro/collision": "^8.1.1||^7.10.0",
         "larastan/larastan": "^2.9||^3.0",
+        "laravel/pint": "^1.14",
+        "laravel/sail": "^1.44",
+        "nunomaduro/collision": "^8.1.1||^7.10.0",
         "orchestra/testbench": "^10.0.0||^9.0.0||^8.22.0",
         "pestphp/pest": "^2.0||^3.0",
         "pestphp/pest-plugin-arch": "^2.5||^3.0",
@@ -35,13 +37,13 @@
     },
     "autoload": {
         "psr-4": {
-            "VendorName\\Skeleton\\": "src/",
-            "VendorName\\Skeleton\\Database\\Factories\\": "database/factories/"
+            "Longestdrive\\LaravelGolfHandicapCalculator\\": "src/",
+            "Longestdrive\\LaravelGolfHandicapCalculator\\Database\\Factories\\": "database/factories/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "VendorName\\Skeleton\\Tests\\": "tests/",
+            "Longestdrive\\LaravelGolfHandicapCalculator\\Tests\\": "tests/",
             "Workbench\\App\\": "workbench/app/"
         }
     },
@@ -63,10 +65,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "VendorName\\Skeleton\\SkeletonServiceProvider"
+                "Longestdrive\\LaravelGolfHandicapCalculator\\LaravelGolfHandicapCalculatorServiceProvider"
             ],
             "aliases": {
-                "Skeleton": "VendorName\\Skeleton\\Facades\\Skeleton"
+                "GolfHandicapCalculator": "GolfHandicapCalculator"
             }
         }
     },
