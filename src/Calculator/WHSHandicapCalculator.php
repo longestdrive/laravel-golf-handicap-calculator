@@ -14,11 +14,11 @@ class WHSHandicapCalculator implements HandicapCalculatorInterface
 {
     private array $options;
 
-    public function getHandicap(array $options): float
+    public function getHandicap(array $options): int
     {
         $this->setCalculationOptions($options);
 
-        return $this->calculateCourseHandicap();
+        return (int) $this->calculateCourseHandicap();
     }
 
     private function calculateCourseHandicap(): float

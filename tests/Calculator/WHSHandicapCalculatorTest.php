@@ -17,7 +17,7 @@ describe('WHSHandicapCalculator', function () {
         ];
 
         // Expected: (10.5 * (113 / 113)) + (72.0 - 72) = 10.5 + 0 = 10.5 (rounded to 11)
-        expect($calculator->getHandicap($options))->toBe(11.0);
+        expect($calculator->getHandicap($options))->toBe(11);
 
         // Test case 2: Different values
         $options = [
@@ -28,7 +28,7 @@ describe('WHSHandicapCalculator', function () {
         ];
 
         // Expected: (15.2 * (125 / 113)) + (71.5 - 70) = 16.8 + 1.5 = 18.3 (rounded to 18)
-        expect($calculator->getHandicap($options))->toBe(18.0);
+        expect($calculator->getHandicap($options))->toBe(18);
     });
 
     it('handles edge cases correctly', function () {
@@ -43,7 +43,7 @@ describe('WHSHandicapCalculator', function () {
         ];
 
         // Expected: (0 * (113 / 113)) + (72.0 - 72) = 0 + 0 = 0
-        expect($calculator->getHandicap($options))->toBe(0.0);
+        expect($calculator->getHandicap($options))->toBe(0);
 
         // Test case 2: Negative handicap (for very good players)
         $options = [
@@ -54,7 +54,7 @@ describe('WHSHandicapCalculator', function () {
         ];
 
         // Expected: (-2.5 * (130 / 113)) + (73.0 - 72) = -2.88 + 1 = -1.88 (rounded to -2)
-        expect($calculator->getHandicap($options))->toBe(-2.0);
+        expect($calculator->getHandicap($options))->toBe(-2);
 
         // Test case 3: Course slope equals minimum value (55)
         $options = [
@@ -65,7 +65,7 @@ describe('WHSHandicapCalculator', function () {
         ];
 
         // Expected: (10 * (55 / 113)) + (70.0 - 72) = 4.87 - 2 = 2.87 (rounded to 3)
-        expect($calculator->getHandicap($options))->toBe(3.0);
+        expect($calculator->getHandicap($options))->toBe(3);
 
         // Test case 4: Course slope equals maximum value (155)
         $options = [
@@ -76,7 +76,7 @@ describe('WHSHandicapCalculator', function () {
         ];
 
         // Expected: (10 * (155 / 113)) + (70.0 - 72) = 13.72 - 2 = 11.72 (rounded to 12)
-        expect($calculator->getHandicap($options))->toBe(12.0);
+        expect($calculator->getHandicap($options))->toBe(12);
     });
 
     it('validates required options', function () {

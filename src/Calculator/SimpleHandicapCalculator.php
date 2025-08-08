@@ -21,11 +21,11 @@ class SimpleHandicapCalculator implements HandicapCalculatorInterface
      * @param  array  $options  Array containing calculation parameters
      * @return float The calculated playing handicap
      */
-    public function getHandicap(array $options): float
+    public function getHandicap(array $options): int
     {
         $this->setCalculationOptions($options);
 
-        return $this->calculateSimpleHandicap();
+        return (int) $this->calculateSimpleHandicap();
     }
 
     /**

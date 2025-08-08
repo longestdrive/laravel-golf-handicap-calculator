@@ -17,7 +17,7 @@ describe('SimpleHandicapCalculator', function () {
         ];
 
         // Expected: (10.5 * (100 / 100)) + ((72.0 - 72) / 2) = 10.5 + 0 = 10.5 (rounded to 11)
-        expect($calculator->getHandicap($options))->toBe(11.0);
+        expect($calculator->getHandicap($options))->toBe(11);
 
         // Test case 2: Different values
         $options = [
@@ -28,7 +28,7 @@ describe('SimpleHandicapCalculator', function () {
         ];
 
         // Expected: (15.2 * (125 / 100)) + ((71.5 - 70) / 2) = 19.0 + 0.75 = 19.75 (rounded to 20)
-        expect($calculator->getHandicap($options))->toBe(20.0);
+        expect($calculator->getHandicap($options))->toBe(20);
     });
 
     it('handles edge cases correctly', function () {
@@ -43,7 +43,7 @@ describe('SimpleHandicapCalculator', function () {
         ];
 
         // Expected: (0 * (100 / 100)) + ((72.0 - 72) / 2) = 0 + 0 = 0
-        expect($calculator->getHandicap($options))->toBe(0.0);
+        expect($calculator->getHandicap($options))->toBe(0);
 
         // Test case 2: Negative handicap (for very good players)
         $options = [
@@ -54,7 +54,7 @@ describe('SimpleHandicapCalculator', function () {
         ];
 
         // Expected: (-2.5 * (130 / 100)) + ((73.0 - 72) / 2) = -3.25 + 0.5 = -2.75 (rounded to -3)
-        expect($calculator->getHandicap($options))->toBe(-3.0);
+        expect($calculator->getHandicap($options))->toBe(-3);
     });
 
     it('validates required options', function () {
