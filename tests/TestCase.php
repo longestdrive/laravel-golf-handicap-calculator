@@ -3,8 +3,8 @@
 namespace Longestdrive\LaravelGolfHandicapCalculator\Tests;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Orchestra\Testbench\TestCase as Orchestra;
 use Longestdrive\LaravelGolfHandicapCalculator\LaravelGolfHandicapCalculatorServiceProvider;
+use Orchestra\Testbench\TestCase as Orchestra;
 
 class TestCase extends Orchestra
 {

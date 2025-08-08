@@ -1,12 +1,12 @@
 <?php
 
 use Longestdrive\LaravelGolfHandicapCalculator\Calculator\WHSHandicapCalculator;
-use Symfony\Component\OptionsResolver\Exception\MissingOptionsException;
 use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
+use Symfony\Component\OptionsResolver\Exception\MissingOptionsException;
 
 describe('WHSHandicapCalculator', function () {
     it('calculates handicap correctly with valid inputs', function () {
-        $calculator = new WHSHandicapCalculator();
+        $calculator = new WHSHandicapCalculator;
 
         // Test case 1: Standard values
         $options = [
@@ -32,7 +32,7 @@ describe('WHSHandicapCalculator', function () {
     });
 
     it('handles edge cases correctly', function () {
-        $calculator = new WHSHandicapCalculator();
+        $calculator = new WHSHandicapCalculator;
 
         // Test case 1: Zero handicap
         $options = [
@@ -80,7 +80,7 @@ describe('WHSHandicapCalculator', function () {
     });
 
     it('validates required options', function () {
-        $calculator = new WHSHandicapCalculator();
+        $calculator = new WHSHandicapCalculator;
 
         // Test case 1: Missing actualHandicap
         $options = [
@@ -120,7 +120,7 @@ describe('WHSHandicapCalculator', function () {
     });
 
     it('validates option types', function () {
-        $calculator = new WHSHandicapCalculator();
+        $calculator = new WHSHandicapCalculator;
 
         // Test case 1: Invalid actualHandicap type (string instead of float)
         $options = [

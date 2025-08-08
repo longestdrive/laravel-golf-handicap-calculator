@@ -18,7 +18,7 @@ class SimpleHandicapCalculator implements HandicapCalculatorInterface
      * Calculate the playing handicap using a simplified formula.
      * This is just a demonstration of an alternative implementation.
      *
-     * @param array $options Array containing calculation parameters
+     * @param  array  $options  Array containing calculation parameters
      * @return float The calculated playing handicap
      */
     public function getHandicap(array $options): float
@@ -30,8 +30,6 @@ class SimpleHandicapCalculator implements HandicapCalculatorInterface
 
     /**
      * Calculate the handicap using a simplified formula
-     *
-     * @return float
      */
     private function calculateSimpleHandicap(): float
     {
@@ -43,13 +41,10 @@ class SimpleHandicapCalculator implements HandicapCalculatorInterface
 
     /**
      * Validate and set calculation options
-     *
-     * @param array $options
-     * @return void
      */
     private function setCalculationOptions(array $options): void
     {
-        $resolver = new OptionsResolver();
+        $resolver = new OptionsResolver;
 
         // Define required options
         $resolver->setRequired([

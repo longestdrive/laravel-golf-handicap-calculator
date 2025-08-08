@@ -1,8 +1,8 @@
 <?php
 
-use Longestdrive\LaravelGolfHandicapCalculator\LaravelGolfHandicapCalculator;
-use Longestdrive\LaravelGolfHandicapCalculator\Calculator\WHSHandicapCalculator;
 use Longestdrive\LaravelGolfHandicapCalculator\Calculator\SimpleHandicapCalculator;
+use Longestdrive\LaravelGolfHandicapCalculator\Calculator\WHSHandicapCalculator;
+use Longestdrive\LaravelGolfHandicapCalculator\LaravelGolfHandicapCalculator;
 
 /**
  * Example of using the Laravel Golf Handicap Calculator with different implementations.
@@ -15,31 +15,31 @@ $courseRating = 72.1;
 $coursePar = 72;
 
 // Method 1: Using the default implementation (WHSHandicapCalculator)
-$calculator = new LaravelGolfHandicapCalculator();
+$calculator = new LaravelGolfHandicapCalculator;
 $handicap = $calculator->getHandicap($actualHandicap, $courseSlope, $courseRating, $coursePar);
-echo "Default (WHS) Handicap: " . $handicap . PHP_EOL;
+echo 'Default (WHS) Handicap: '.$handicap.PHP_EOL;
 
 // Method 2: Explicitly using the WHSHandicapCalculator
-$whsCalculator = new LaravelGolfHandicapCalculator(new WHSHandicapCalculator());
+$whsCalculator = new LaravelGolfHandicapCalculator(new WHSHandicapCalculator);
 $handicap = $whsCalculator->getHandicap($actualHandicap, $courseSlope, $courseRating, $coursePar);
-echo "Explicit WHS Handicap: " . $handicap . PHP_EOL;
+echo 'Explicit WHS Handicap: '.$handicap.PHP_EOL;
 
 // Method 3: Using the SimpleHandicapCalculator
-$simpleCalculator = new LaravelGolfHandicapCalculator(new SimpleHandicapCalculator());
+$simpleCalculator = new LaravelGolfHandicapCalculator(new SimpleHandicapCalculator);
 $handicap = $simpleCalculator->getHandicap($actualHandicap, $courseSlope, $courseRating, $coursePar);
-echo "Simple Handicap: " . $handicap . PHP_EOL;
+echo 'Simple Handicap: '.$handicap.PHP_EOL;
 
 // Method 4: Switching implementations at runtime
-$calculator = new LaravelGolfHandicapCalculator();
-echo "Initial (WHS) Handicap: " . $calculator->getHandicap($actualHandicap, $courseSlope, $courseRating, $coursePar) . PHP_EOL;
+$calculator = new LaravelGolfHandicapCalculator;
+echo 'Initial (WHS) Handicap: '.$calculator->getHandicap($actualHandicap, $courseSlope, $courseRating, $coursePar).PHP_EOL;
 
 // Switch to SimpleHandicapCalculator
-$calculator->setCalculator(new SimpleHandicapCalculator());
-echo "After switching to Simple Handicap: " . $calculator->getHandicap($actualHandicap, $courseSlope, $courseRating, $coursePar) . PHP_EOL;
+$calculator->setCalculator(new SimpleHandicapCalculator);
+echo 'After switching to Simple Handicap: '.$calculator->getHandicap($actualHandicap, $courseSlope, $courseRating, $coursePar).PHP_EOL;
 
 // Switch back to WHSHandicapCalculator
-$calculator->setCalculator(new WHSHandicapCalculator());
-echo "After switching back to WHS Handicap: " . $calculator->getHandicap($actualHandicap, $courseSlope, $courseRating, $coursePar) . PHP_EOL;
+$calculator->setCalculator(new WHSHandicapCalculator);
+echo 'After switching back to WHS Handicap: '.$calculator->getHandicap($actualHandicap, $courseSlope, $courseRating, $coursePar).PHP_EOL;
 
 /**
  * In a Laravel application, you can also use dependency injection:

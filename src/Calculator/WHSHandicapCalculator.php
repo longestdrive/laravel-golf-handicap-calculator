@@ -14,10 +14,6 @@ class WHSHandicapCalculator implements HandicapCalculatorInterface
 {
     private array $options;
 
-    /**
-     * @param array $options
-     * @return float
-     */
     public function getHandicap(array $options): float
     {
         $this->setCalculationOptions($options);
@@ -30,13 +26,9 @@ class WHSHandicapCalculator implements HandicapCalculatorInterface
         return round(($this->options['actualHandicap'] * ($this->options['courseSlope'] / 113)) + ($this->options['courseRating'] - $this->options['coursePar']));
     }
 
-    /**
-     * @param array $options
-     * @return void
-     */
     private function setCalculationOptions(array $options): void
     {
-        $resolver = new OptionsResolver();
+        $resolver = new OptionsResolver;
 
         // Define required options
         $resolver->setRequired([
