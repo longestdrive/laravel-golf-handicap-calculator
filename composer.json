@@ -68,7 +68,7 @@
                 "Longestdrive\\LaravelGolfHandicapCalculator\\LaravelGolfHandicapCalculatorServiceProvider"
             ],
             "aliases": {
-                "GolfHandicapCalculator": "GolfHandicapCalculator"
+                "GolfHandicapCalculator": "Longestdrive\\LaravelGolfHandicapCalculator\\Facades\\GolfHandicapCalculator"
             }
         }
     },
