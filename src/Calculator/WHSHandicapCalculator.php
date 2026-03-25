@@ -21,6 +21,17 @@ class WHSHandicapCalculator implements HandicapCalculatorInterface
         return (int) $this->calculateCourseHandicap();
     }
 
+    public function reverseHandicapIndex(array $options): ?float
+    {
+        $this->setReverseCalculationOptions($options);
+
+        if ($this->options['courseSlope'] == 0) {
+            return null;
+        }
+
+        return ($this->options['playingHandicap'] - ($this->options['courseRating'] - $this->options['coursePar'])) * (113 / $this->options['courseSlope']);
+    }
+
     private function calculateCourseHandicap(): float
     {
         return round(($this->options['actualHandicap'] * ($this->options['courseSlope'] / 113)) + ($this->options['courseRating'] - $this->options['coursePar']));
@@ -40,6 +51,25 @@ class WHSHandicapCalculator implements HandicapCalculatorInterface
 
         // Define allowed types for each option
         $resolver->setAllowedTypes('actualHandicap', ['float', 'int']);
+        $resolver->setAllowedTypes('courseSlope', ['float', 'int']);
+        $resolver->setAllowedTypes('courseRating', ['float', 'int']);
+        $resolver->setAllowedTypes('coursePar', 'int');
+
+        $this->options = $resolver->resolve($options);
+    }
+
+    private function setReverseCalculationOptions(array $options): void
+    {
+        $resolver = new OptionsResolver;
+
+        $resolver->setRequired([
+            'playingHandicap',
+            'courseSlope',
+            'courseRating',
+            'coursePar',
+        ]);
+
+        $resolver->setAllowedTypes('playingHandicap', 'int');
         $resolver->setAllowedTypes('courseSlope', ['float', 'int']);
         $resolver->setAllowedTypes('courseRating', ['float', 'int']);
         $resolver->setAllowedTypes('coursePar', 'int');

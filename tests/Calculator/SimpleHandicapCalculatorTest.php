@@ -3,6 +3,7 @@
 use Longestdrive\LaravelGolfHandicapCalculator\Calculator\SimpleHandicapCalculator;
 use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 use Symfony\Component\OptionsResolver\Exception\MissingOptionsException;
+use Symfony\Component\OptionsResolver\Exception\UndefinedOptionsException;
 
 describe('SimpleHandicapCalculator', function () {
     it('calculates handicap correctly with valid inputs', function () {
@@ -139,5 +140,98 @@ describe('SimpleHandicapCalculator', function () {
         ];
 
         expect(fn () => $calculator->getHandicap($options))->toThrow(InvalidOptionsException::class);
+    });
+});
+
+describe('SimpleHandicapCalculator reverseHandicapIndex', function () {
+    it('reverse-calculates the handicap index from a playing handicap', function () {
+        $calculator = new SimpleHandicapCalculator;
+
+        // Test case 1: Standard slope of 100 — no slope adjustment, no rating/par difference
+        // forward: (10.5 * (100/100)) + ((72.0-72)/2) = 10.5 → round = 11
+        // reverse: (11 - (72.0-72)/2) * (100/100) = 11.0
+        $result = $calculator->reverseHandicapIndex([
+            'playingHandicap' => 11,
+            'courseSlope' => 100,
+            'courseRating' => 72.0,
+            'coursePar' => 72,
+        ]);
+        expect($result)->toBe(11.0);
+
+        // Test case 2: Non-standard slope with course rating above par
+        // forward: (15.2 * (125/100)) + ((71.5-70)/2) = 19.0 + 0.75 = 19.75 → round = 20
+        // reverse: (20 - (71.5-70)/2) * (100/125) = (20 - 0.75) * 0.8 = 19.25 * 0.8 = 15.4
+        $result = $calculator->reverseHandicapIndex([
+            'playingHandicap' => 20,
+            'courseSlope' => 125,
+            'courseRating' => 71.5,
+            'coursePar' => 70,
+        ]);
+        expect($result)->toBeFloat();
+        expect(round($result, 1))->toBe(15.4);
+    });
+
+    it('handles negative playing handicap', function () {
+        $calculator = new SimpleHandicapCalculator;
+
+        // forward: (-2.5 * (130/100)) + ((73.0-72)/2) = -3.25 + 0.5 = -2.75 → round = -3
+        // reverse: (-3 - (73.0-72)/2) * (100/130) = (-3 - 0.5) * 0.7692 = -3.5 * 0.7692 = -2.6923
+        $result = $calculator->reverseHandicapIndex([
+            'playingHandicap' => -3,
+            'courseSlope' => 130,
+            'courseRating' => 73.0,
+            'coursePar' => 72,
+        ]);
+        expect($result)->toBeFloat();
+        expect(round($result, 4))->toBe(-2.6923);
+    });
+
+    it('returns null when courseSlope is zero', function () {
+        $calculator = new SimpleHandicapCalculator;
+
+        $result = $calculator->reverseHandicapIndex([
+            'playingHandicap' => 10,
+            'courseSlope' => 0,
+            'courseRating' => 72.0,
+            'coursePar' => 72,
+        ]);
+        expect($result)->toBeNull();
+    });
+
+    it('validates required options', function () {
+        $calculator = new SimpleHandicapCalculator;
+
+        expect(fn () => $calculator->reverseHandicapIndex([
+            'courseSlope' => 100,
+            'courseRating' => 72.0,
+            'coursePar' => 72,
+        ]))->toThrow(MissingOptionsException::class);
+
+        expect(fn () => $calculator->reverseHandicapIndex([
+            'playingHandicap' => 10,
+            'courseRating' => 72.0,
+            'coursePar' => 72,
+        ]))->toThrow(MissingOptionsException::class);
+    });
+
+    it('validates option types', function () {
+        $calculator = new SimpleHandicapCalculator;
+
+        // playingHandicap must be int
+        expect(fn () => $calculator->reverseHandicapIndex([
+            'playingHandicap' => 10.5,
+            'courseSlope' => 100,
+            'courseRating' => 72.0,
+            'coursePar' => 72,
+        ]))->toThrow(InvalidOptionsException::class);
+
+        // actualHandicap is not a valid option for reverseHandicapIndex
+        expect(fn () => $calculator->reverseHandicapIndex([
+            'playingHandicap' => 10,
+            'actualHandicap' => 10.5,
+            'courseSlope' => 100,
+            'courseRating' => 72.0,
+            'coursePar' => 72,
+        ]))->toThrow(UndefinedOptionsException::class);
     });
 });

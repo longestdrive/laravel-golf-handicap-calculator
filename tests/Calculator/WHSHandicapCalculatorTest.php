@@ -3,6 +3,7 @@
 use Longestdrive\LaravelGolfHandicapCalculator\Calculator\WHSHandicapCalculator;
 use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 use Symfony\Component\OptionsResolver\Exception\MissingOptionsException;
+use Symfony\Component\OptionsResolver\Exception\UndefinedOptionsException;
 
 describe('WHSHandicapCalculator', function () {
     it('calculates handicap correctly with valid inputs', function () {
@@ -161,5 +162,98 @@ describe('WHSHandicapCalculator', function () {
         ];
 
         expect(fn () => $calculator->getHandicap($options))->toThrow(InvalidOptionsException::class);
+    });
+});
+
+describe('WHSHandicapCalculator reverseHandicapIndex', function () {
+    it('reverse-calculates the handicap index from a playing handicap', function () {
+        $calculator = new WHSHandicapCalculator;
+
+        // Test case 1: Standard reference slope — no adjustment needed
+        // forward: (10.0 * (113 / 113)) + (72.0 - 72) = 10.0 → round = 10
+        // reverse: (10 - (72.0 - 72)) * (113 / 113) = 10.0
+        $result = $calculator->reverseHandicapIndex([
+            'playingHandicap' => 10,
+            'courseSlope' => 113,
+            'courseRating' => 72.0,
+            'coursePar' => 72,
+        ]);
+        expect($result)->toBe(10.0);
+
+        // Test case 2: Non-standard slope with course rating above par
+        // forward: (15.2 * (125/113)) + (71.5-70) = 16.814 + 1.5 = 18.314 → round = 18
+        // reverse: (18 - (71.5 - 70)) * (113 / 125) = 16.5 * 0.904 = 14.916
+        $result = $calculator->reverseHandicapIndex([
+            'playingHandicap' => 18,
+            'courseSlope' => 125,
+            'courseRating' => 71.5,
+            'coursePar' => 70,
+        ]);
+        expect($result)->toBeFloat();
+        expect(round($result, 3))->toBe(14.916);
+    });
+
+    it('handles negative playing handicap', function () {
+        $calculator = new WHSHandicapCalculator;
+
+        // forward: (-2.5 * (130/113)) + (73.0-72) = -2.876 + 1 = -1.876 → round = -2
+        // reverse: (-2 - (73.0 - 72)) * (113 / 130) = (-2 - 1) * 0.8692 = -3 * 0.8692 = -2.6077
+        $result = $calculator->reverseHandicapIndex([
+            'playingHandicap' => -2,
+            'courseSlope' => 130,
+            'courseRating' => 73.0,
+            'coursePar' => 72,
+        ]);
+        expect($result)->toBeFloat();
+        expect(round($result, 4))->toBe(-2.6077);
+    });
+
+    it('returns null when courseSlope is zero', function () {
+        $calculator = new WHSHandicapCalculator;
+
+        $result = $calculator->reverseHandicapIndex([
+            'playingHandicap' => 10,
+            'courseSlope' => 0,
+            'courseRating' => 72.0,
+            'coursePar' => 72,
+        ]);
+        expect($result)->toBeNull();
+    });
+
+    it('validates required options', function () {
+        $calculator = new WHSHandicapCalculator;
+
+        expect(fn () => $calculator->reverseHandicapIndex([
+            'courseSlope' => 113,
+            'courseRating' => 72.0,
+            'coursePar' => 72,
+        ]))->toThrow(MissingOptionsException::class);
+
+        expect(fn () => $calculator->reverseHandicapIndex([
+            'playingHandicap' => 10,
+            'courseRating' => 72.0,
+            'coursePar' => 72,
+        ]))->toThrow(MissingOptionsException::class);
+    });
+
+    it('validates option types', function () {
+        $calculator = new WHSHandicapCalculator;
+
+        // playingHandicap must be int
+        expect(fn () => $calculator->reverseHandicapIndex([
+            'playingHandicap' => 10.5,
+            'courseSlope' => 113,
+            'courseRating' => 72.0,
+            'coursePar' => 72,
+        ]))->toThrow(InvalidOptionsException::class);
+
+        // actualHandicap is not a valid option for reverseHandicapIndex
+        expect(fn () => $calculator->reverseHandicapIndex([
+            'playingHandicap' => 10,
+            'actualHandicap' => 10.5,
+            'courseSlope' => 113,
+            'courseRating' => 72.0,
+            'coursePar' => 72,
+        ]))->toThrow(UndefinedOptionsException::class);
     });
 });

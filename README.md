@@ -81,6 +81,42 @@ $handicap = $calculator->getHandicap([
 echo "Playing Handicap: " . $handicap;
 ```
 
+### Reverse Calculating a Handicap Index
+
+Every calculator also supports `reverseHandicapIndex()`, which works backwards from a known playing handicap to estimate the original handicap index. This is useful when you have a course handicap and want to derive the underlying handicap index.
+
+> **Note:** Because the playing handicap is a rounded integer, the reverse result is an approximation — not a guaranteed exact match of the original handicap index.
+
+```php
+use Longestdrive\LaravelGolfHandicapCalculator\Facades\GolfHandicapCalculator;
+
+$calculator = GolfHandicapCalculator::make('whs');
+
+$handicapIndex = $calculator->reverseHandicapIndex([
+    'playingHandicap' => 8,   // Known playing/course handicap (int)
+    'courseSlope'     => 128, // Course slope rating (int|float)
+    'courseRating'    => 70.3, // Course rating (float|int)
+    'coursePar'       => 72,  // Course par (int)
+]);
+
+// Returns a float (or null if courseSlope is zero)
+echo "Estimated Handicap Index: " . $handicapIndex; // e.g. 8.563
+```
+
+The method returns `null` if `courseSlope` is zero (to avoid division by zero).
+
+#### WHS reverse formula
+
+```
+handicapIndex = (playingHandicap - (courseRating - coursePar)) × (113 / courseSlope)
+```
+
+#### Simple reverse formula
+
+```
+handicapIndex = (playingHandicap - (courseRating - coursePar) / 2) × (100 / courseSlope)
+```
+
 ### Using Different Calculation Methods
 
 The package is designed with a flexible factory approach that allows you to implement and use different handicap calculation strategies:
@@ -176,35 +212,62 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class CustomHandicapCalculator implements HandicapCalculatorInterface
 {
     private array $options;
-    
-    public function getHandicap(array $options): float
+
+    public function getHandicap(array $options): int
     {
-        // Validate and set options
         $this->setCalculationOptions($options);
-        
+
         // Your custom calculation logic here
-        return round(/* your formula using $this->options */);
+        return (int) round(/* your formula using $this->options */);
     }
-    
+
+    public function reverseHandicapIndex(array $options): ?float
+    {
+        $this->setReverseCalculationOptions($options);
+
+        if ($this->options['courseSlope'] == 0) {
+            return null;
+        }
+
+        // Your custom reverse formula here
+        return /* derived handicap index as float */;
+    }
+
     private function setCalculationOptions(array $options): void
     {
         $resolver = new OptionsResolver();
-        
-        // Define required options
+
         $resolver->setRequired([
             'actualHandicap',
             'courseSlope',
             'courseRating',
             'coursePar',
-            // Add any additional options your calculator needs
         ]);
-        
-        // Define allowed types for each option
+
         $resolver->setAllowedTypes('actualHandicap', ['float', 'int']);
         $resolver->setAllowedTypes('courseSlope', ['float', 'int']);
         $resolver->setAllowedTypes('courseRating', ['float', 'int']);
         $resolver->setAllowedTypes('coursePar', 'int');
-        
+
+        $this->options = $resolver->resolve($options);
+    }
+
+    private function setReverseCalculationOptions(array $options): void
+    {
+        $resolver = new OptionsResolver();
+
+        $resolver->setRequired([
+            'playingHandicap',
+            'courseSlope',
+            'courseRating',
+            'coursePar',
+        ]);
+
+        $resolver->setAllowedTypes('playingHandicap', 'int');
+        $resolver->setAllowedTypes('courseSlope', ['float', 'int']);
+        $resolver->setAllowedTypes('courseRating', ['float', 'int']);
+        $resolver->setAllowedTypes('coursePar', 'int');
+
         $this->options = $resolver->resolve($options);
     }
 }
