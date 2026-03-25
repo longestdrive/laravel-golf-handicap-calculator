@@ -25,11 +25,47 @@ class WHSHandicapCalculator implements HandicapCalculatorInterface
     {
         $this->setReverseCalculationOptions($options);
 
-        if ($this->options['courseSlope'] == 0) {
+        $slope = $this->options['courseSlope'];
+        $courseRating = $this->options['courseRating'];
+        $coursePar = $this->options['coursePar'];
+        $playingHandicap = $this->options['playingHandicap'];
+
+        if ($slope == 0) {
             return null;
         }
 
-        return ($this->options['playingHandicap'] - ($this->options['courseRating'] - $this->options['coursePar'])) * (113 / $this->options['courseSlope']);
+        $raw = ($playingHandicap - ($courseRating - $coursePar)) * (113 / $slope);
+        $start = (int) round($raw * 10);
+
+        $best = null;
+        $bestDistance = null;
+
+        for ($delta = -100; $delta <= 100; $delta++) {
+            $candidate = ($start + $delta) / 10;
+
+            if ($candidate < -5 || $candidate > 54) {
+                continue;
+            }
+
+            $recalculated = $this->getHandicap([
+                'actualHandicap' => $candidate,
+                'courseSlope' => $slope,
+                'courseRating' => $courseRating,
+                'coursePar' => $coursePar,
+            ]);
+
+            if ($recalculated !== $playingHandicap) {
+                continue;
+            }
+
+            $distance = abs($candidate - $raw);
+            if ($bestDistance === null || $distance < $bestDistance) {
+                $best = $candidate;
+                $bestDistance = $distance;
+            }
+        }
+
+        return $best !== null ? (float) $best : null;
     }
 
     private function calculateCourseHandicap(): float
