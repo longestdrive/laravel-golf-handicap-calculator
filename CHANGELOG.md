@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-golf-handicap-calculator` will be documented in this file.
 
+## v2.0.1 - bug fix precision in revers calculation - 2026-03-25
+
+Added precision to reverse calculation to ensure the calculated value will provide the same playing handicap when creating the handicap
+
 ## v2.0.0 - Reverse Handicap Index - 2026-03-25
 
 ### Breaking Changes
