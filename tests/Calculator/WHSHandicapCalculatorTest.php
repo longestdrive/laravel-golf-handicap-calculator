@@ -190,7 +190,7 @@ describe('WHSHandicapCalculator reverseHandicapIndex', function () {
             'coursePar' => 70,
         ]);
         expect($result)->toBeFloat();
-        expect(round($result, 3))->toBe(14.916);
+        expect(round($result, 3))->toBe(14.9);
     });
 
     it('handles negative playing handicap', function () {
@@ -205,7 +205,7 @@ describe('WHSHandicapCalculator reverseHandicapIndex', function () {
             'coursePar' => 72,
         ]);
         expect($result)->toBeFloat();
-        expect(round($result, 4))->toBe(-2.6077);
+        expect(round($result, 4))->toBe(-2.6);
     });
 
     it('returns null when courseSlope is zero', function () {

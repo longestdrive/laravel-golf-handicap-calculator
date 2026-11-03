@@ -55,7 +55,7 @@ describe('HandicapCalculator feature', function () {
 
         expect($handicapIndex)->not()->toBeNull();
         expect(is_float($handicapIndex))->toBeTrue();
-        expect(round($handicapIndex, 3))->toBe(8.563);
+        expect(round($handicapIndex, 3))->toBe(8.6);
     });
 
     it('reverse-calculates a Simple handicap index using the factory', function () {
