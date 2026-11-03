@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-golf-handicap-calculator` will be documented in this file.
 
+## v2.1.0 Laravel 13 support - 2026-11-03
+
+Added support for Laravel 13 and dropped support for Laravel 10
+
 ## v2.0.1 - bug fix precision in revers calculation - 2026-03-25
 
 Added precision to reverse calculation to ensure the calculated value will provide the same playing handicap when creating the handicap
