@@ -17,6 +17,13 @@ The package uses a factory pattern that makes it easy to extend with your own ca
 ## Support us
 Built using [spatie/laravel-package-skeleton]
 
+## Requirements
+
+| Package version | PHP          | Laravel          |
+|-----------------|--------------|------------------|
+| 2.1.x           | 8.3, 8.4     | 11.x, 12.x, 13.x |
+| 2.0.x           | 8.3, 8.4     | 10.x, 11.x, 12.x |
+
 ## Installation
 
 You can install the package via composer:

@@ -19,7 +19,7 @@ class SimpleHandicapCalculator implements HandicapCalculatorInterface
      * This is just a demonstration of an alternative implementation.
      *
      * @param  array  $options  Array containing calculation parameters
-     * @return float The calculated playing handicap
+     * @return int The calculated playing handicap
      */
     public function getHandicap(array $options): int
     {
